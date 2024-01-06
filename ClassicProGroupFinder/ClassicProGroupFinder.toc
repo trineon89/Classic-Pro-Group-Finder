@@ -1,0 +1,32 @@
+## Interface: 11500
+## Title: Classic Pro Group Finder
+## Notes: A simple group finder addon for WoW Classic.
+## Author: Jill Staudt - trineon89
+## Version: 0.1
+## Dependencies: Ace3
+
+libs/LibStub/LibStub.lua
+libs/AceAddon-3.0/AceAddon-3.0.lua
+libs/AceComm-3.0/AceComm-3.0.lua
+libs/LibSerialize/LibSerialize.lua
+libs/LibDeflate/LibDeflate.lua
+
+core.lua
+
+modules/definitions.lua
+modules/activities.lua
+modules/listening_channels_config.lua
+
+layouts/base_layout.lua
+layouts/ac_selector_layout.lua
+layouts/activities_layout.lua
+layouts/results_layout.lua
+layouts/listing_element_layout.lua
+
+modules/minimap_button.lua
+modules/text_parser.lua
+modules/addon_messaging.lua
+modules/listings.lua
+modules/listening_handler.lua
+
+debug.lua
