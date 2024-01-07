@@ -14,7 +14,7 @@ function ClassicProGroupFinder:OnInitialize()
 
 	self.listings = self.Listings:new()
     -- self.listings:addListing("Test message","Test Sender")  -- Static test entry
-    self:UpdateResultsLayout()  -- Call this somewhere appropriate to update the UI
+    -- self:UpdateResultsLayout()  -- Call this somewhere appropriate to update the UI
 end
 
 function ClassicProGroupFinder:OnEnable()

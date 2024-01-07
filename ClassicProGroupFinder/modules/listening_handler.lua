@@ -30,6 +30,13 @@ function ClassicProGroupFinder:StopListening()
 end
 
 function ClassicProGroupFinder:HandleChatMessage(event, msg, author, ...)
+    if self:passesGlobalFilter(msg) then
+		print("Debug - Filtered message received:", msg, "from", author)  -- Debug print
+        self.textParser:parseMessage(msg, author)
+    end
+end
+
+function ClassicProGroupFinder:passesGlobalFilter(msg)
     local globalFilterPass = false
     local filters = self.currentFilterType == "LFG" and self.listeningChannelsConfig.filtersLFG or self.listeningChannelsConfig.filtersLFM
     
@@ -41,7 +48,7 @@ function ClassicProGroupFinder:HandleChatMessage(event, msg, author, ...)
     end
 
     if not globalFilterPass then
-        return  -- Message does not pass the specific global filter (LFG or LFM)
+        return false  -- Message does not pass the specific global filter (LFG or LFM)
     end
 
     local activityFilterPass = false
@@ -54,10 +61,5 @@ function ClassicProGroupFinder:HandleChatMessage(event, msg, author, ...)
         end
     end
 
-     if activityFilterPass then
-        print("Debug - Filtered message received:", msg, "from", author)  -- Debug print
-        self.listings:addListing(msg, author)
-        self:UpdateResultsLayout()
-    end
+    return activityFilterPass
 end
-

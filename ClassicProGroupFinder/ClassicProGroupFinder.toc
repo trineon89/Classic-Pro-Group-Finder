@@ -13,6 +13,8 @@ libs/LibDeflate/LibDeflate.lua
 
 core.lua
 
+class/listingclass.lua
+
 modules/definitions.lua
 modules/activities.lua
 modules/listening_channels_config.lua

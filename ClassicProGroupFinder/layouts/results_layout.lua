@@ -28,6 +28,7 @@ end
 function ClassicProGroupFinder:UpdateResultsLayout()
     self:Debug("Debug - Updating results layout")  -- Debug print
     if not self.resultsWindow or not self.listings then
+		print("No data to update")  -- Debug print
         return  -- Ensure the results window and listings are initialized
     end
 
