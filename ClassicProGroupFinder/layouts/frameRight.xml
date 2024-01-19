@@ -1,0 +1,9 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Frame name="FrameRightTemplate" virtual="true">
+        <DropDownMenu name="$parentComboBox" inherits="UIDropDownMenuTemplate">
+            <Anchors>
+                <Anchor point="TOP"/>
+            </Anchors>
+        </DropDownMenu>
+    </Frame>
+</Ui>

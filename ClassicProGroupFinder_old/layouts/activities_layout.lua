@@ -13,6 +13,8 @@ function ClassicProGroupFinder:CreateActivitiesLayout(container, activityType)
         return
     end
 
+	local ElementsGroup = AceGUI:Create("SimpleGroup")
+
 	-- Dropdown for specific activities
     local activitiesDropdown = AceGUI:Create("Dropdown")
 	
@@ -22,7 +24,7 @@ function ClassicProGroupFinder:CreateActivitiesLayout(container, activityType)
     end
 
 	activitiesDropdown:SetLabel("Select " .. activityType)
-    activitiesDropdown:SetWidth(200)
+    --activitiesDropdown:SetWidth(200)
     activitiesDropdown:SetList(activityList)
 	self.activitiesDropdown = activitiesDropdown
     	
@@ -32,15 +34,15 @@ function ClassicProGroupFinder:CreateActivitiesLayout(container, activityType)
 
     -- Button for "List Self/Find Group"
     listSelfButton:SetText("List Self/Find Group")
-    listSelfButton:SetWidth(200)
+    --listSelfButton:SetWidth(200)
 
     -- Button for "Find Members"
     findMembersButton:SetText("Find Members")
-    findMembersButton:SetWidth(200)
+    --findMembersButton:SetWidth(200)
 	
 	-- Button to stop listening
     stopListeningButton:SetText("Stop Listening")
-    stopListeningButton:SetWidth(200)
+    --stopListeningButton:SetWidth(200)
 		
 	-- Function to update button visibility
     local function updateButtonVisibility()
@@ -90,16 +92,18 @@ function ClassicProGroupFinder:CreateActivitiesLayout(container, activityType)
 		self:ResetActivitiesLayout()
     end)
 	-- Add widgets to the container
-    container:AddChild(activitiesDropdown)
-    container:AddChild(listSelfButton)
-    container:AddChild(findMembersButton)
-    container:AddChild(stopListeningButton)
+	ElementsGroup:AddChild(activitiesDropdown)
+    ElementsGroup:AddChild(listSelfButton)
+    ElementsGroup:AddChild(findMembersButton)
+    ElementsGroup:AddChild(stopListeningButton)
+    container:AddChild(ElementsGroup)
+    
 	
     updateButtonVisibility()
 	
 	local resultsButton = AceGUI:Create("Button")
 	resultsButton:SetText("Show Results")
-	resultsButton:SetWidth(150)
+	--resultsButton:SetWidth(150)
 	resultsButton:SetCallback("OnClick", function()
 		ClassicProGroupFinder:CreateResultsWindow()
 	end)

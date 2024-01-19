@@ -1,0 +1,21 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Frame name="FrameLeftTemplate" virtual="true">
+        <Button name="$parentButton1" inherits="UIPanelButtonTemplate">
+            <Size>
+                <AbsDimension x="160" y="50"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP"/>
+            </Anchors>
+        </Button>
+
+        <Button name="$parentButton2" inherits="UIPanelButtonTemplate">
+            <Size>
+                <AbsDimension x="160" y="50"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP" relativeTo="$parentButton1" relativePoint="BOTTOM"/>
+            </Anchors>
+        </Button>
+    </Frame>
+</Ui>

@@ -1,0 +1,52 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Frame name="CPGFMainFrame" hidden="true" parent="UIParent" inherits="BackdropTemplate">
+        <Size>
+            <AbsDimension x="400" y="300"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+
+        <!-- Background Texture -->
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true">
+                    <Texture file="Interface/DialogFrame/UI-DialogBox-Background"/>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <!-- Border Texture -->
+        <Layers>
+            <Layer level="BORDER">
+                <Texture setAllPoints="true">
+                    <Texture file="Interface/DialogFrame/UI-DialogBox-Border"/>
+                </Texture>
+            </Layer>
+        </Layers>
+		
+		<!-- Inner Frame Left -->
+        <Frame name="$parentFrameLeft" inherits="FrameLeft">
+            <Size>
+                <AbsDimension x="40" y="100"/> <!-- 40% width, 100% height -->
+            </Size>
+            <Anchors>
+                <Anchor point="TOPLEFT"/>
+                <Anchor point="BOTTOMLEFT"/>
+            </Anchors>
+            <!-- Additional FrameLeft attributes -->
+        </Frame>
+
+        <!-- Inner Frame Right -->
+        <Frame name="$parentFrameRight">
+            <Size>
+                <AbsDimension x="60" y="100"/> <!-- 60% width, 100% height -->
+            </Size>
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentFrameLeft" relativePoint="TOPRIGHT"/>
+                <Anchor point="BOTTOMLEFT" relativeTo="$parentFrameLeft" relativePoint="BOTTOMRIGHT"/>
+            </Anchors>
+            <!-- Additional FrameRight attributes -->
+        </Frame>
+    </Frame>
+</Ui>

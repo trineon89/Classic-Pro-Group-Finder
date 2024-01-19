@@ -1,46 +1,38 @@
--- core.lua
-local addonName, addonTable = ...
+-- Import Ace3 libraries
+local AceAddon = LibStub("AceAddon-3.0")
+local AceComm = LibStub("AceComm-3.0")
 
--- Addon setup and initialization
-local ClassicProGroupFinder = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceEvent-3.0", "AceComm-3.0")
+-- Define the addon
+ClassicProGroupFinder = AceAddon:NewAddon("ClassicProGroupFinder", "AceComm-3.0")
 
+-- Instance of MainFrame
+ClassicProGroupFinder.mainFrame = nil
 
-
+-- Function to initialize the addon
 function ClassicProGroupFinder:OnInitialize()
-	self:Debug("core loaded")
-    -- Perform setup tasks here
-	
-	-- Initialize Listings
+    -- Create and initialize the MainFrame
+    self.mainFrame = MainFrame:New()
 
-	self.listings = self.Listings:new()
-    -- self.listings:addListing("Test message","Test Sender")  -- Static test entry
-    -- self:UpdateResultsLayout()  -- Call this somewhere appropriate to update the UI
-end
-
-function ClassicProGroupFinder:OnEnable()
-    -- Called when the addon is enabled
-end
-
-function ClassicProGroupFinder:OnDisable()
-    -- Called when the addon is disabled
-end
-
-addonTable.ClassicProGroupFinder = ClassicProGroupFinder
-
--- Slash command handler
-SLASH_CLASSICPROGROUPFINDER1 = "/cpgf"
-SLASH_CLASSICPROGROUPFINDER2 = "/cpgfclose"
-
-SlashCmdList["CLASSICPROGROUPFINDER"] = function(input)
-    input = input:trim()
-    if input == "" then
-        ClassicProGroupFinder:ShowInterface()
-    elseif input == "close" then
-        ClassicProGroupFinder:HideInterface()
-    elseif input == "results" or input == "r" then
-        ClassicProGroupFinder:CreateResultsWindow()
-    else
-        -- Handle any other arguments or show usage message
-        print("Usage: /cpgf [close/results/r]")
+    -- Register slash command
+    SLASH_CLASSICPROGROUPFINDER1 = "/cpgf"
+    SlashCmdList["CLASSICPROGROUPFINDER"] = function(msg)
+        self:ToggleMainFrame(msg)
     end
+	
+	
+	self.mainFrame:Show()
+end
+
+-- Function to toggle the main frame
+function ClassicProGroupFinder:ToggleMainFrame(msg)
+    if self.mainFrame.frame:IsShown() then
+        self.mainFrame:Hide()
+    else
+        self.mainFrame:Show()
+    end
+end
+
+-- Event handler for communication (example)
+function ClassicProGroupFinder:OnCommReceived(prefix, message, distribution, sender)
+    -- Handle received communication
 end

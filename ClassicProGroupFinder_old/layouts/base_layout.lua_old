@@ -1,0 +1,202 @@
+-- base_layout.lua
+local addonName, addonTable = ...
+local ClassicProGroupFinder = addonTable.ClassicProGroupFinder
+local AceGUI = LibStub("AceGUI-3.0")
+
+-- Function to create and show the base layout
+function ClassicProGroupFinder:ShowInterface()
+    if self.mainFrame then
+        self.mainFrame:Show()
+        return
+    end
+
+    local mainFrame = AceGUI:Create("Frame")
+	mainFrame:SetTitle("Classic Pro Group Finder")
+	--mainFrame:SetStatusText("Ready")
+	mainFrame:SetLayout("Fill")  -- Change to Fill layout
+	self.mainFrame = mainFrame
+	
+	
+	local function removeFrameButtons(frame)
+		if frame.GetChildren then
+			for _, child in ipairs({frame:GetChildren()}) do
+				if child:IsObjectType("Button") then
+					child:Hide()  -- This hides the button
+				end
+			end
+		end
+	end
+
+	-- Call this function with the mainFrame to remove/hide its buttons
+	removeFrameButtons(mainFrame.frame)
+	
+    -- Set the OnClose callback to hide the frame
+    mainFrame:SetCallback("OnClose", function(widget)
+        widget:Hide()
+        self.mainFrame = nil
+    end)
+	
+	local mainFrameWidth = mainFrame.frame:GetWidth()
+	local mainFrameHeight = mainFrame.frame:GetHeight()
+
+	-- Create a group for AC Selector and Activities Layouts
+	local contentGroup = AceGUI:Create("SimpleGroup")
+	contentGroup:SetLayout("Flow")  -- Set this group to Flow layout
+	contentGroup:SetFullWidth(true)
+	mainFrame:AddChild(contentGroup)
+
+	local PaneBackdrop  = {
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+		tile = true, tileSize = 16, edgeSize = 16,
+		insets = { left = 3, right = 3, top = 5, bottom = 3 }
+	}
+
+	-- AC Selector Layout
+	local acSelectorLayout = AceGUI:Create("SimpleGroup")
+	acSelectorLayout:SetRelativeWidth(0.4)
+	acSelectorLayout:SetLayout("List")
+	acSelectorLayout:SetAutoAdjustHeight(false)
+	contentGroup:AddChild(acSelectorLayout)
+	self.acSelectorLayout = acSelectorLayout
+	self:CreateACSelectorLayout(acSelectorLayout)
+	
+	local border = acSelectorLayout.frame
+	
+	if not border.SetBackdrop then
+		Mixin(border, BackdropTemplateMixin)
+	end
+	--border.frame:SetBackdrop(nil)
+	
+	border:SetPoint("TOPLEFT", 0, -17)
+	border:SetPoint("BOTTOMRIGHT", -1, 3)
+	border:SetBackdrop(PaneBackdrop)
+	border:SetBackdropColor(0.1, 0.1, 0.1, 0.5)
+	border:SetBackdropBorderColor(0.4, 0.4, 0.4)
+	
+	-- Activities Layout
+	local activitiesLayout = AceGUI:Create("SimpleGroup")
+	activitiesLayout:SetRelativeWidth(0.6)
+	activitiesLayout:SetLayout("List")
+	activitiesLayout:SetAutoAdjustHeight(false)
+	contentGroup:AddChild(activitiesLayout)
+	self.activitiesLayout = activitiesLayout
+	self:UpdateActivitiesLayout("Dungeon")
+	self.activitiesLayout.frame:Hide()
+	
+	-- Function to adjust inline group heights
+	local function adjustInlineGroupHeights(mainFrameHeight, elem1, elem2)
+		local inlineGroupHeight = mainFrameHeight - 20 -- Adjust as necessary for padding, headers, etc.
+		acSelectorLayout:SetHeight(inlineGroupHeight)
+		activitiesLayout:SetHeight(inlineGroupHeight)
+	end
+
+	-- Move inlineGroup1 and inlineGroup2 up by 20 pixels
+--	moveInlineGroupUp(contentGroup, 0)
+--	moveInlineGroupUp(inlineGroup2, 20)
+	
+	function activitiesLayout:OnHeightSet(height)
+		local inlineGroupHeight = mainFrame.frame:GetHeight() - 40 -- Adjust as necessary for padding, headers, etc.
+		if (height == inlineGroupHeight) then return end
+		acSelectorLayout:SetHeight(inlineGroupHeight)
+		activitiesLayout:SetHeight(inlineGroupHeight)
+	end
+
+--[[
+	-- Close Button
+	local closeButton = AceGUI:Create("Button")
+	closeButton.frame:SetParent(mainFrame.frame)
+	closeButton.frame:SetPoint("TOPRIGHT", mainFrame.frame, "TOPRIGHT", -10, -10)
+	closeButton:SetCallback("OnClick", function() mainFrame:Hide() end)
+	mainFrame:AddChild(closeButton)
+
+	if not closeButton.frame.SetBackdrop then
+		Mixin(closeButton.frame, BackdropTemplateMixin)
+	end
+	closeButton.frame:SetBackdrop(nil)
+
+	closeButton.frame:SetBackdropColor(0, 0, 0, 0)
+closeButton.frame:SetBackdropBorderColor(0, 0, 0, 0)
+	
+	-- Assuming `closeButton` is your AceGUI button
+	local texturePath = "Interface\\Buttons\\UI-Panel-MinimizeButton-Up"
+
+	-- Set the normal texture (button appearance when not interacting)
+	closeButton.frame:SetNormalTexture(texturePath)
+
+	-- Set the pushed texture (button appearance when clicked)
+	closeButton.frame:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
+
+	-- Set the highlight texture (button appearance on mouse over)
+	closeButton.frame:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight")
+
+	-- Disable the tile of highlight texture to prevent stretching
+	closeButton.frame:GetHighlightTexture():SetTexCoord(0, 1, 0, 1)
+	closeButton.frame:GetHighlightTexture():SetAllPoints()
+	
+	-- Optionally, resize your button to fit the texture size, if needed
+	closeButton:SetWidth(32) -- width of the texture
+	closeButton:SetHeight(32) -- height of the texture
+--]]	
+
+	
+	local closeButton = CreateFrame("Button", "MyCloseButton", mainFrame.frame, "UIPanelCloseButton")
+	closeButton:SetPoint("TOPRIGHT", mainFrame.frame, "TOPRIGHT", -5, -6)
+	closeButton:SetSize(30, 32)
+	
+	local mainFrameLevel = mainFrame.frame:GetFrameLevel()
+	-- Set the closeButton frame level to be higher than mainFrame
+	closeButton:SetFrameLevel(mainFrameLevel + 6)
+	
+	-- Use the default UI texture for the close button
+	closeButton:SetNormalTexture("Interface/Buttons/UI-Panel-MinimizeButton-Up")
+	closeButton:SetPushedTexture("Interface/Buttons/UI-Panel-MinimizeButton-Down")
+	closeButton:SetHighlightTexture("Interface/Buttons/UI-Panel-MinimizeButton-Highlight", "ADD")
+
+	-- Assign the close function to the button's click
+	closeButton:SetScript("OnClick", function(self)
+		mainFrame.frame:Hide()
+	end)
+
+	-- Remove the button's background if needed
+	if not closeButton.SetBackdrop then
+		Mixin(closeButton, BackdropTemplateMixin)
+	end
+	closeButton:SetBackdrop(nil)
+
+	-- Add the new close button directly to the mainFrame
+	mainFrame.frame.closeButton = closeButton
+
+--[[
+	-- Apply Mixin and Set Backdrop if necessary
+	if not closeButton.frame.SetBackdrop then
+		Mixin(closeButton.frame, BackdropTemplateMixin)
+	end
+	closeButton.frame:SetBackdrop({
+		bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+		edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+		tile = true, tileSize = 32, edgeSize = 32,
+		insets = { left = 8, right = 8, top = 8, bottom = 8 }
+	})
+--]]
+end
+
+function ClassicProGroupFinder:UpdateActivitiesLayout(activityType)
+    if not self.activitiesLayout then
+        print("Error: Activities layout container does not exist.")
+        return
+    end
+
+    -- Clear the current activities layout
+    self.activitiesLayout:ReleaseChildren()
+
+    -- Repopulate the activities layout based on the selected activity type
+    self:CreateActivitiesLayout(self.activitiesLayout, activityType)
+end
+
+-- Function to hide the base layout
+function ClassicProGroupFinder:HideInterface()
+    if self.mainFrame then
+        self.mainFrame:Hide()
+    end
+end
